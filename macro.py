@@ -2,6 +2,8 @@ from format import Hex, String
 
 
 class Macro:
+    CODE = "K"
+
     def __init__(
         self,
         id=1,
@@ -32,9 +34,12 @@ class Macro:
         self.var10 = var10
         self.var11 = var11
 
+    def __repr__(self):
+        return 'Macro<M{}, "{}">({})'.format(self.id, self.name, len(self.steps))
+
     @staticmethod
     def verify(line):
-        return line[0] == "K"
+        return line[0] == Macro.CODE
 
     @staticmethod
     def parse(line):
@@ -64,7 +69,7 @@ class Macro:
     @staticmethod
     def format(macro):
         line = [
-            "K",
+            Macro.CODE,
             Hex.format(macro.id),
             String.format(macro.name),
             Hex.format(len(macro.steps)),

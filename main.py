@@ -8,17 +8,8 @@ OUT_FILE = "L:\\MagicQ\\FileWriteTest.shw"
 show = Showfile()
 show.read(IN_FILE)
 
-for i in range(len(show.data)):
-    if Macro.verify(show.data[i]):
-        macro = Macro.parse(show.data[i])
+show.macros[0].name = "ABCDEFG"
 
-        for j in range(len(macro.steps)):
-            if steps.Mouse.verify(macro.steps[j]):
-                step = steps.Mouse.parse(macro.steps[j])
-                step.x = 99
-                step.y = 99
-                macro.steps[j] = steps.Mouse.format(step)
-
-        show.data[i] = Macro.format(macro)
+print(show.macros)
 
 show.write(OUT_FILE)

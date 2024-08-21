@@ -1,7 +1,11 @@
+from macro import Macro
+
+
 class Showfile:
     def __init__(self, header=[], data=[]):
         self.header = header
-        self.data = data
+        self.unparsed = data
+        self.macros = []
 
     def read(self, path):
         with open(path, "rb") as f:
@@ -18,7 +22,7 @@ class Showfile:
             remaining_lines = "".join(remaining_lines)
 
             # Extract each data block denoted by a semicolon followed by a newline
-            self.data = [
+            data = [
                 list(filter(lambda x: x, l.split(",")))
                 for l in filter(
                     lambda x: x,
@@ -29,11 +33,23 @@ class Showfile:
                 )
             ]
 
+            # Extract parsable data and store unparsed data
+            self.unparsed = []
+            self.macros = []
+
+            for line in data:
+                if Macro.verify(line):
+                    self.macros.append(Macro.parse(line))
+
+                else:
+                    self.unparsed.append(line)
+
     def write(self, path):
         with open(path, "wb+") as f:
-            data = (
+            all_data = self.unparsed + [Macro.format(m) for m in self.macros]
+            file_data = (
                 "\r\n".join(self.header)
                 + "\r\n\r\n"
-                + ";\r\n".join([",".join(l) for l in self.data])
+                + ";\r\n".join([",".join(l) for l in all_data])
             )
-            f.write(data.encode())
+            f.write(file_data.encode())
