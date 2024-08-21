@@ -4,7 +4,7 @@ macro.title("My Macro")
 macro.id(1)
 
 for letter in "William":
-    key.press("KEY_{}".format(letter))
+    key.press("KEY_" + letter)
 
 mouse.press(100, 100)
 
