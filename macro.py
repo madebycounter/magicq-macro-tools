@@ -1,4 +1,5 @@
 from format import Hex, String
+from steps import Mouse
 
 
 class Macro:
@@ -9,14 +10,14 @@ class Macro:
         id=1,
         name="Macro",
         steps=[],
-        var4="",
-        var5="",
-        var6="",
-        var7="",
-        var8="",
-        var9="",
-        var10="",
-        var11="",
+        var4="00000000",
+        var5="0000",
+        var6="0000",
+        var7="0000",
+        var8="0000",
+        var9="00000000",
+        var10="00000003",
+        var11="0",
     ):
         self.id = id
         self.name = name
@@ -50,7 +51,12 @@ class Macro:
         steps = []
 
         for i in range(n_steps):
-            steps.append(line[9 + i * 5 : 9 + ((i + 1) * 5)])
+            step = line[9 + i * 5 : 9 + ((i + 1) * 5)]
+
+            if Mouse.verify(step):
+                steps.append(Mouse.parse(step))
+            else:
+                steps.append(step)
 
         return Macro(
             id=id,
@@ -81,7 +87,10 @@ class Macro:
         ]
 
         for step in macro.steps:
-            line += step
+            if isinstance(step, Mouse):
+                line += Mouse.format(step)
+            else:
+                line += step
 
         line += [macro.var9, macro.var10, macro.var11]
 

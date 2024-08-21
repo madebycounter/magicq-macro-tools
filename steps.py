@@ -6,7 +6,7 @@ class Mouse:
     PRESSED = 1
     RELEASED = 0
 
-    def __init__(self, time=1, var1="", x=0, y=0, direction=PRESSED):
+    def __init__(self, time=1, var1="0000", x=0, y=0, direction=PRESSED):
         self.time = time
         self.var1 = var1
         self.x = x
