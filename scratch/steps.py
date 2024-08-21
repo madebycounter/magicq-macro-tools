@@ -9,6 +9,8 @@ with open("keys.txt", "r") as f:
         KEY_MAP[m[0]] = m[1]
         KEY_MAP_REVERSED[m[1]] = m[0]
 
+print(KEY_MAP)
+
 
 class MQKey:
     CODE = "0100"

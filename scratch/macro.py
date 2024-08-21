@@ -56,13 +56,7 @@ class Macro:
 
         for i in range(n_steps):
             step = line[9 + i * 5 : 9 + ((i + 1) * 5)]
-
-            if Mouse.verify(step):
-                steps.append(Mouse.parse(step))
-            if MQKey.verify(step):
-                steps.append(MQKey.parse(step))
-            else:
-                steps.append(step)
+            steps.append(step)
 
         return Macro(
             id=id,
@@ -80,26 +74,20 @@ class Macro:
 
     @staticmethod
     def format(macro):
-        line = [
-            Macro.CODE,
-            Hex.format(macro.id),
-            String.format(macro.name),
-            Hex.format(len(macro.steps)),
-            macro.var4,
-            macro.var5,
-            macro.var6,
-            macro.var7,
-            macro.var8,
-        ]
-
-        for step in macro.steps:
-            if isinstance(step, Mouse):
-                line += Mouse.format(step)
-            elif isinstance(step, MQKey):
-                line += MQKey.format(step)
-            else:
-                line += step
-
-        line += [macro.var9, macro.var10, macro.var11]
+        line = (
+            [
+                Macro.CODE,
+                Hex.format(macro.id),
+                String.format(macro.name),
+                Hex.format(len(macro.steps)),
+                macro.var4,
+                macro.var5,
+                macro.var6,
+                macro.var7,
+                macro.var8,
+            ]
+            + macro.steps
+            + [macro.var9, macro.var10, macro.var11]
+        )
 
         return line
