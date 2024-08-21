@@ -1,33 +1,37 @@
 from showfile import Showfile
 from macro import Macro
-from steps import Mouse
+from steps import MQKey
 
-IN_FILE = "L:\\MagicQ\\MacroTest5.shw"
-OUT_FILE = "L:\\MagicQ\\FileWriteTest.shw"
+IN_FILE = "C:\\Users\\william\\Documents\\MagicQ\\show\\NewShow.shw"
+OUT_FILE = "C:\\Users\\william\\Documents\\MagicQ\\show\\NewShowUpdated.shw"
 
+# Load show file
 show = Showfile()
 show.read(IN_FILE)
 
-# Edit an existing macro
-show.macros[0].name = "ABCDEFG"
-
-for step in show.macros[0].steps:
-    if isinstance(step, Mouse):
-        step.x = 99
-        step.y = 99
-
 # Create a new macro
 my_macro = Macro(
-    id=2,
-    name="Generated Macro",
-    steps=[
-        Mouse(time=1, x=100, y=400),
-        Mouse(time=2, x=200, y=300, direction=Mouse.RELEASED),
-        Mouse(time=3, x=300, y=200),
-        Mouse(time=4, x=400, y=100, direction=Mouse.RELEASED),
-    ],
+    id=1,
+    name="Generated Macro With Keys",
+    steps=MQKey.press("KEY_H")
+    + MQKey.press("KEY_e")
+    + MQKey.press("KEY_l")
+    + MQKey.press("KEY_l")
+    + MQKey.press("KEY_o")
+    + MQKey.press("KEY_SPACE")
+    + MQKey.press("KEY_W")
+    + MQKey.press("KEY_o")
+    + MQKey.press("KEY_r")
+    + MQKey.press("KEY_l")
+    + MQKey.press("KEY_d"),
 )
 
+# Fix times (since we didn't specify)
+# This gives each macro step a subsequent time so MagicQ can understand it
+my_macro.fix_times()
+
+# Add macro to the show
 show.macros.append(my_macro)
 
+# Write to new showfile
 show.write(OUT_FILE)

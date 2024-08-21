@@ -1,5 +1,5 @@
 from format import Hex, String
-from steps import Mouse
+from steps import Mouse, MQKey
 
 
 class Macro:
@@ -38,6 +38,10 @@ class Macro:
     def __repr__(self):
         return 'Macro<M{}, "{}">({})'.format(self.id, self.name, len(self.steps))
 
+    def fix_times(self):
+        for idx, step in enumerate(self.steps):
+            step.time = idx
+
     @staticmethod
     def verify(line):
         return line[0] == Macro.CODE
@@ -55,6 +59,8 @@ class Macro:
 
             if Mouse.verify(step):
                 steps.append(Mouse.parse(step))
+            if MQKey.verify(step):
+                steps.append(MQKey.parse(step))
             else:
                 steps.append(step)
 
@@ -89,6 +95,8 @@ class Macro:
         for step in macro.steps:
             if isinstance(step, Mouse):
                 line += Mouse.format(step)
+            elif isinstance(step, MQKey):
+                line += MQKey.format(step)
             else:
                 line += step
 
